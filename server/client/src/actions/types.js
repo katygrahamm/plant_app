@@ -1,0 +1,1 @@
+export const FETCH_PLANTs = 'fetch_plants';
