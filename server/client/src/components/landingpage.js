@@ -3,46 +3,43 @@ import { connect } from "react-redux";
 import * as actions from '../actions';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import _ from "lodash";
-import GoogleLoginButton from './googlebutton';
-
+import InputLabel from '@material-ui/core/InputLabel';
+import TextField from '@material-ui/core/TextField';
+import DashboardRedirect from './DashboardRedirect'
 
 class LandingPage extends Component {
+  constructor(props) {
+    super(props)
 
-  renderPage = () => {
+    this.state = {
+      name:''
+    }
+  }
 
-    return (
-      <React.Fragment>
-        <div className="d-flex landingLogo">
-          <h1 className="logoTitle d-flex"> PlantApp</h1>
-        </div>
-
-        <div className="landing-page">
-          <div className="row">
-            <div className="col-md-8-offset-3 text-center">
-              <div className="card col-md-offset-3 text-center" styles="width: 18rem;">
-                <div className="card-body">
-                <h4 className="text-center">Login to PlantApp</h4>
-                <br></br>
-                  <GoogleLoginButton />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </React.Fragment>
-
-    )
+  handleSubmit() {
+    console.log(this.state.name)
+    this.props.addUser(this.state.name)
   }
 
   render() {
     return (
-      <div>{this.renderPage()}</div>
-    )
+              <div>
+                <h4 className="text-center">Tell Us Your Name</h4>
+                <form className="landing-page-form" noValidate autoComplete="off" onSubmit={event => {this.handleSubmit()}}>
+                    <TextField id="filled-basic" label="Filled" variant="filled" onChange={event=> this.setState({ name: event.target.value })}></TextField>
+                </form>
+              </div>
+      )  
+    }
   }
+
+function mapStateToProps(state) {
+  return ({
+    user: state.user
+  })
 }
 
-function mapStateToProps({ auth }) {
-  return { auth };
-}
-
-export default connect(mapStateToProps, actions)(LandingPage);
+export default connect(
+  mapStateToProps,
+  actions
+)(LandingPage);

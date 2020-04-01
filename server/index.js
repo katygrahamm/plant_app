@@ -5,8 +5,6 @@ const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
 const keys = require('./config/keys');
-const passport = require ('passport')
-const GoogleStrategy = require('passport-google-oauth20').Strategy
 const User = require('./models/user')
 const Plant = require('./models/plant')
 const Space = require('./models/space')
@@ -17,9 +15,9 @@ mongoose.connect(keys.MONGODB_URI);
 
 app.use(
     cors({
-      origin: "http://localhost:3000", // allow to server to accept request from different origin
+      origin: 'http://localhost:3000', // allow to server to accept request from different origin
       methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-      credentials: true // allow session cookie from browser to pass through
+      credentials: true,
     })
 );
 
@@ -30,72 +28,9 @@ app.use(
   })
 )
 
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(passport.initialize())
-app.use(passport.session())
-
-passport.serializeUser((user, done) => {
-    done(null, user._id)
-})
-
-passport.deserializeUser((id, done) => {
-    done(null, id)
-})
-
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: '204037633170-tqts2sqjhk59apaa6be1jk1nbk57uqap.apps.googleusercontent.com',
-      clientSecret: 'RA7OwDxbwZZtdyr5hoKcJqlw',
-      callbackURL: 'http://localhost:5000/auth/google/callback'
-    },
-    (accessToken, refreshToken, profile, done) => {
-        User.findOne({ google_id: profile.id }).then(existingUser => {
-          console.log("access token: ", accessToken);
-          console.log("refresh token: ", refreshToken);
-          if (existingUser) {
-            done(null, existingUser)
-          } else {
-            new User({
-              google_id: profile.id,
-              profile_name: profile.displayName,
-              email: profile.emails[0].value,
-              profile_pic_url: profile.photos[0].value,
-              plant_collection: [],
-              wishList:[],
-              spaces: []
-            })
-            .save()
-            .then(user => done(null, user))
-        }
-      })
-    }
-  )
-)
-
-const ensureAuthenticated = (req, res, next) => {
-  if (!req.user) {
-    res.redirect('/')
-  } else {
-    next();
-  }
-};
-
-const googleAuth = passport.authenticate('google',
-  { scope: ['profile', 'email']
-})
-
-app.get('/auth/google', googleAuth)
-
-app.get('/auth/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/' }),
-  function(req, res) {
-    res.redirect('http://localhost:3000/dashboard');
-    res.end()
-});
 
 app.get('/logout', (req, res) => {
   req.logout();
@@ -104,7 +39,7 @@ app.get('/logout', (req, res) => {
   res.end()
 });
 
-app.get('/current_user', ensureAuthenticated, (req, res) => {
+app.get('/current_user', (req, res) => {
   const id = req.user
   User
   .findById(id).exec((error, user) => {
@@ -214,6 +149,36 @@ app.post('/:userId/:plantId/addtocollection', (req, res) => {
   })
 })
 
+app.get('/:plantId/plantdetail', (req, res) => {
+  const plantId = req.params.plantId
+
+  Plant.findById(plantId).exec((err, plant) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.send(plant)
+    }
+ })
+})
+
+app.post('/adduser', (req, res) => {
+  
+  let newUser = new User()
+
+    newUser.name = req.body.name
+    newUser.plant_collection = []
+    newUser.wish_list = []
+    newUser.spaces =[]
+
+    newUser.save(function (err, user) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(user)
+        res.redirect('http://localhost:3000/dashboard')
+    }
+  })
+})
 
 // Server Setup
 const port = process.env.PORT || 5000;

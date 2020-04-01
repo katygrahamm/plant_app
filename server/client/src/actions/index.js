@@ -1,10 +1,10 @@
 import axios from "axios";
-import { FETCH_RECOMMENDATIONS, FETCH_PLANTS, ADD_COLLECTION, FETCH_USER } from './types';
+import { FETCH_RECOMMENDATIONS, FETCH_PLANTS, ADD_COLLECTION, FETCH_USER, FETCH_PLANTDETAIL, ADD_USER } from './types';
 
 
 export const fetchUser= () => dispatch => {
 
-  axios.get(`http://localhost:5000/current_user`
+  axios.get(`http://localhost:5000/current_user`, {credentials: 'include'}
 
 ).then(function (response) {
   console.log("current user responded", response)
@@ -54,6 +54,35 @@ export const addCollection = (plant) => dispatch => {
     console.log(error);
   });
 };
+
+export const fetchPlantDetail = (plant) => dispatch => {
+
+  axios.get(`http://localhost:5000/${plant}/plantdetail`
+
+  ).then(function (response) {
+    console.log('response from fetchplants', response)
+    dispatch({ type: FETCH_PLANTDETAIL , payload: response.data });
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+};
+
+export const addUser = (name) => dispatch => {
+
+  const body = {"name":name}
+
+  axios.post(`http://localhost:5000/adduser`, body
+
+  ).then(function (response) {
+    console.log('response from addUser', response)
+    dispatch({ type: ADD_USER , payload: response.data });
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+};
+
 
 
 

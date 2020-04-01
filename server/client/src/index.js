@@ -14,6 +14,7 @@ import Recommendations from './components/recommendations'
 import MyRoomsDashboard from './components/MyRoomsDashboard'
 import MyPlantsDashboard from './components/MyPlantsDashboard'
 import PlantLibraryDashboard from './components/PlantLibraryDashboard'
+import PlantDetailDashboard from './components/PlantDetailDashboard'
 
 const store = createStore(rootReducer, {}, applyMiddleware(thunk));
 
@@ -26,6 +27,7 @@ render(
             <Route exact path="/myrooms" component={MyRoomsDashboard} />
             <Route exact path="/myplants" component={MyPlantsDashboard} />
             <Route exact path="/plantlibrary" component={PlantLibraryDashboard} />
+            <Route exact path="/:plantId/plantdetail" component={PlantDetailDashboard} />
           </Switch>
       </BrowserRouter>
     </Provider>,
