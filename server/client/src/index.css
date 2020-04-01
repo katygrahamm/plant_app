@@ -24,3 +24,19 @@
     margin-right: 20px;
     margin-bottom: 20px;
 }
+
+.plant-library-container {
+    float: left;
+    padding: 30px;
+    align-items: center;
+}
+
+.common-name-library {
+    overflow-wrap: normal;
+}
+
+.plant-image-library {
+    align-items: center;
+}
+
+

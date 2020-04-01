@@ -48,6 +48,7 @@ class Recommendations extends Component {
 
   renderPlants() {
     console.log(this.props.recommendations)
+    console.log(this.props.user._id)
     if (this.props.recommendations == []) {
       return (
         <div>Loading ... </div>
@@ -70,7 +71,7 @@ class Recommendations extends Component {
               <h5 className="botanical-name-recomm">{plant.botanical_name}</h5>
               <br></br>
               <img className="plant-img-recomm" height="150px" width="auto" alt="plant-image" src={plant.image_url}></img>
-              <Button className="button-add-to-collection" variant="outline-secondary">+ Add to Room</Button>
+              <Button className="button-add-to-collection" variant="outline-secondary">+ Add to Space</Button>
               <hr />
               </div>
 
@@ -204,6 +205,7 @@ render() {
 function mapStateToProps(state) {
   return ({
     recommendations: state.recommendations,
+    user: state.user
   })
 }
 

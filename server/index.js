@@ -174,11 +174,11 @@ app.post('/adduser', (req, res) => {
       if (err) {
         res.send(err);
       } else {
-        res.send(user)
-        res.redirect('http://localhost:3000/dashboard')
+        res.send({user})
     }
   })
 })
+
 
 // Server Setup
 const port = process.env.PORT || 5000;

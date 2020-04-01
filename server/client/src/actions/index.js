@@ -1,5 +1,5 @@
 import axios from "axios";
-import { FETCH_RECOMMENDATIONS, FETCH_PLANTS, ADD_COLLECTION, FETCH_USER, FETCH_PLANTDETAIL, ADD_USER } from './types';
+import { FETCH_RECOMMENDATIONS, FETCH_PLANTS, ADD_COLLECTION, FETCH_USER, FETCH_PLANTDETAIL, ADD_USER, FETCH_DASHBOARD } from './types';
 
 
 export const fetchUser= () => dispatch => {
@@ -70,7 +70,7 @@ export const fetchPlantDetail = (plant) => dispatch => {
 
 export const addUser = (name) => dispatch => {
 
-  const body = {"name":name}
+  const body = {"name": name}
 
   axios.post(`http://localhost:5000/adduser`, body
 
@@ -82,6 +82,7 @@ export const addUser = (name) => dispatch => {
     console.log(error);
   });
 };
+
 
 
 

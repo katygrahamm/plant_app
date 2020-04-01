@@ -11,7 +11,7 @@ import Dashboard from './components/dashboard';
 import LandingPage from './components/landingpage'
 import PlantLibrary from './components/plantlibrary'
 import Recommendations from './components/recommendations'
-import MyRoomsDashboard from './components/MyRoomsDashboard'
+import MySpacesDashboard from './components/MySpacesDashboard'
 import MyPlantsDashboard from './components/MyPlantsDashboard'
 import PlantLibraryDashboard from './components/PlantLibraryDashboard'
 import PlantDetailDashboard from './components/PlantDetailDashboard'
@@ -24,7 +24,7 @@ render(
           <Switch>
             <Route exact path="/" component={LandingPage} />
             <Route exact path="/dashboard" component={Dashboard} />
-            <Route exact path="/myrooms" component={MyRoomsDashboard} />
+            <Route exact path="/myrooms" component={MySpacesDashboard} />
             <Route exact path="/myplants" component={MyPlantsDashboard} />
             <Route exact path="/plantlibrary" component={PlantLibraryDashboard} />
             <Route exact path="/:plantId/plantdetail" component={PlantDetailDashboard} />
