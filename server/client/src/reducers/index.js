@@ -1,11 +1,13 @@
 import { combineReducers } from "redux";
-import PlantsReducer from "./reducer-plants";
-import TotalPagesReducer from "./reducer-pages";
+import RecommendationsReducer from "./reducer-recommendations";
+import PlantsReducer from './reducer-plants'
+import UserReducer from './reducer-user'
 import { reducer as formReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
+  recommendations: RecommendationsReducer,
   plants: PlantsReducer,
-  total_pages: TotalPagesReducer,
+  user: UserReducer
 });
 
 export default rootReducer;

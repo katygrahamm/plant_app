@@ -1,0 +1,25 @@
+.plant-form {
+    margin-top: 20px;
+}
+
+.plant-recommendations {
+    margin-left: 20px;
+}
+
+.title-plant-recomm {
+    color: #696969;
+}
+
+.common-name-recomm {
+    font-style: bold;
+    color: #696969;
+}
+
+.botanical-name-recomm{
+   font-style: italic;
+   color: #696969;
+}
+
+.plant-img-recomm {
+    margin-right: 20px;
+}

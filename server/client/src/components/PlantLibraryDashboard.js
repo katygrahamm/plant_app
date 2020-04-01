@@ -20,7 +20,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems } from './listitems';
 import '../index.css'
-import Recommendations from './recommendations'
+import PlantLibrary from './plantlibrary'
 
 function Copyright() {
   return (
@@ -117,7 +117,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Dashboard() {
+export default function PlantLibraryDashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -173,7 +173,7 @@ export default function Dashboard() {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Paper className={fixedHeightPaper}>
-                <Recommendations />
+                <PlantLibrary />
               </Paper>
             </Grid>
           </Grid>
