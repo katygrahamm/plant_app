@@ -143,7 +143,7 @@ export default function Dashboard() {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" id="title" noWrap className={classes.title}>
-            My Plant App
+            Create a Space
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">

@@ -13,6 +13,10 @@ const SpaceSchema = new Schema({
     plant_collection: [{
         type: Schema.Types.ObjectId,
         ref: 'Plant'
+    }],
+    recommended_plants: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Plant'
     }]
 })
 

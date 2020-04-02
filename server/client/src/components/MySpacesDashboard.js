@@ -20,6 +20,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems } from './listitems';
 import '../index.css'
+import MySpaces from './myspaces'
 import Recommendations from './recommendations'
 
 function Copyright() {
@@ -173,7 +174,7 @@ export default function MySpacesDashboard() {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Paper className={fixedHeightPaper}>
-           hello
+                <MySpaces />
               </Paper>
             </Grid>
           </Grid>

@@ -21,7 +21,13 @@ export const mainListItems = (
       <ListItemIcon>
         <ArtTrackIcon />
       </ListItemIcon>
-      <Link to='/dashboard'><ListItemText primary="Dashboard" /></Link>
+      <Link to='/dashboard'><ListItemText primary="Create" /></Link>
+    </ListItem>
+    <ListItem button>
+    <ListItemIcon>
+        <DashboardIcon />
+      </ListItemIcon>
+      <Link to='/myrooms'><ListItemText primary="My Spaces" /></Link>
     </ListItem>
     <ListItem button>
       <ListItemIcon>
@@ -29,12 +35,6 @@ export const mainListItems = (
       </ListItemIcon>
       <Link to='/myplants'><ListItemText primary="My Plants" /></Link>
      </ListItem>
-    <ListItem button>
-    <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <Link to='/myrooms'><ListItemText primary="My Rooms" /></Link>
-    </ListItem>
     <ListItem button>
       <ListItemIcon>
         <PhotoLibraryIcon />

@@ -1,29 +1,16 @@
 import axios from "axios";
-import { FETCH_RECOMMENDATIONS, FETCH_PLANTS, ADD_COLLECTION, FETCH_USER, FETCH_PLANTDETAIL, ADD_USER, FETCH_DASHBOARD } from './types';
+import { FETCH_RECOMMENDATIONS, FETCH_PLANTS, ADD_COLLECTION, FETCH_PLANTDETAIL, ADD_USER, FETCH_DASHBOARD, ADD_SPACE, FETCH_SPACES } from './types';
 
 
-export const fetchUser= () => dispatch => {
-
-  axios.get(`http://localhost:5000/current_user`, {credentials: 'include'}
-
-).then(function (response) {
-  console.log("current user responded", response)
-  dispatch({ type: FETCH_USER, payload: response.data });
-})
-.catch(function (error) {
-  console.log(error);
-});
-};
-
-export const fetchPlantRecommendations = (name, water, light, kid_friendly, pet_friendly, difficulty, room_size, room_height) => dispatch => {
+export const createSpace = (userId, name, water, light, kid_friendly, pet_friendly, difficulty, room_size, room_height) => dispatch => {
   
   const body = {"name":name, "water": water, "light": light, "kid_friendly": kid_friendly, "pet_friendly": pet_friendly, "difficulty": difficulty, "room_size": room_size, "room_height": room_height}
   
   console.log(body)
 
-  axios.post(`http://localhost:5000/addspace`, body).then(function (response) {
+  axios.post(`http://localhost:5000/${userId}/createSpace`, body).then(function (response) {
     console.log(response)
-    dispatch({ type: FETCH_RECOMMENDATIONS , payload: response.data });
+    dispatch({ type: ADD_SPACE , payload: response.data });
   })
   .catch(function (error) {
     console.log(error);
@@ -41,14 +28,15 @@ export const fetchPlants = () => dispatch => {
   });
 };
 
-export const addCollection = (plant) => dispatch => {
+export const addSpace = (userId) => dispatch => {
 
-  const body = {'plant': plant }
+  const body = { 'userId': userId }
+  console.log(body)
 
-  axios.post(`http://localhost:5000/collection`, body
+  axios.post(`http://localhost:5000/${userId}/addspace`, body
   ).then(function (response) {
     console.log('response from addCollection', response)
-    dispatch({ type: ADD_COLLECTION, payload: response.data });
+    dispatch({ type: ADD_SPACE, payload: response.data });
   })
   .catch(function (error) {
     console.log(error);
@@ -68,9 +56,9 @@ export const fetchPlantDetail = (plant) => dispatch => {
   });
 };
 
-export const addUser = (name) => dispatch => {
+export const addUser = (name, userId) => dispatch => {
 
-  const body = {"name": name}
+  const body = {"name": name, "userId": userId}
 
   axios.post(`http://localhost:5000/adduser`, body
 
@@ -83,7 +71,31 @@ export const addUser = (name) => dispatch => {
   });
 };
 
+export const addCollection = (plant, userId) => dispatch => {
+
+  const body = {'plant': plant, 'userId': userId }
+  console.log(body)
+
+  axios.post(`http://localhost:5000/createspace`, body
+  ).then(function (response) {
+    console.log('response from addCollection', response)
+    dispatch({ type: ADD_COLLECTION, payload: response.data });
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+};
 
 
+export const fetchSpaces = (userId) => dispatch => {
 
+  axios.get(`http://localhost:5000/${userId}/userspaces`
+  ).then(function (response) {
+    console.log('response from fetchspaces', response)
+    dispatch({ type: FETCH_SPACES , payload: response.data });
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+};
 

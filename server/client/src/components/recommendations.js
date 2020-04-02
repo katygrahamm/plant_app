@@ -41,50 +41,24 @@ class Recommendations extends Component {
 
   handleSubmit(event) {
     event.preventDefault()
-    this.props.fetchPlantRecommendations(this.state.name, this.state.water, this.state.light, this.state.pet_friendly, this.state.kid_friendly, this.state.difficulty,
-      this.state.room_size, this.state.room_height)
+    let userId = localStorage.getItem('userid')
+    console.log(this.state)
+    this.props.createSpace(userId, this.state.name, this.state.water, this.state.light, this.state.pet_friendly, this.state.kid_friendly, this.state.difficulty,
+        this.state.room_size, this.state.room_height)
+    this.renderCreated()
   }
 
-
-  renderPlants() {
-    console.log(this.props.recommendations)
-    console.log(this.props.user._id)
-    if (this.props.recommendations == []) {
-      return (
-        <div>Loading ... </div>
-      )
-    } else {
-      return(
-          <div className="plant-recommendations">
-            <Grid item xs
-              spacing={3}
-              justify="center"
-            >
-              <div>
-              <h2 className="title-plant-recomm">Plant Recommendations</h2>
-              <h2 className="title-plant-recomm">{this.state.name}</h2>
-              <hr />
-              {
-              this.props.recommendations.map(plant => (
-              <div>
-              <h3 className="common-name-recomm">{plant.common_name}</h3>
-              <h5 className="botanical-name-recomm">{plant.botanical_name}</h5>
-              <br></br>
-              <img className="plant-img-recomm" height="150px" width="auto" alt="plant-image" src={plant.image_url}></img>
-              <Button className="button-add-to-collection" variant="outline-secondary">+ Add to Space</Button>
-              <hr />
-              </div>
-
-              ))
-              
-              }
-            
-            </div>
-          </Grid>
-        </div>
-      )
-    }
+  handleAdd(plant){
+    console.log(plant)
   }
+
+renderCreated () {
+  return(
+  <div>
+    <h2>{this.state.name} has been saved!</h2>
+  </div>
+  )
+}
 
 render() {
   return ( 
@@ -193,9 +167,6 @@ render() {
       </div>
       <br></br>
       </form>
-      <div>
-        {this.renderPlants()}
-      </div>
     </Grid>
     </div>
     )

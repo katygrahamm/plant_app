@@ -52,49 +52,61 @@ app.get('/current_user', (req, res) => {
   })
 });
 
-app.post('/addspace',  (req, res) => {
+app.post('/:userId/createspace',  (req, res) => {
 
-  let newSpace = new Space()
+  let userId = req.params.userId
+  let roomSize = 0
 
-    newSpace.name = req.body.name
-    newSpace.room_size = req.body.room_size
-    newSpace.room_height = req.body.room_height
-    newSpace.water = req.body.water
-    newSpace.light = req.body.light
-    newSpace.kid_friendly = req.body.kid_friendly
-    newSpace.pet_friendly = req.body.pet_friendly
-    newSpace.plant_collection = []
-  
+    if (req.body.room_size === "Small"){
+       roomSize = 2 
+    } else if (req.body.room_size === "Medium") {
+       roomSize = 4
+    } else if (req.body.room_size === "Large") {
+       roomSize = 12
+    }
 
-  newSpace.save(function (err) {
-      if (err) {
-        res.send(err);
-      } else {
-        if (req.body.room_size === "Small"){
-          req.body.room_size = 2 
-        } else if (req.body.room_size === "Medium") {
-          req.body.room_size = 4
-        } else if (req.body.room_size === "Large") {
-          req.body.room_size = 12
-        }
-          Plant.find({ 
-                max_height: {$lt : req.body.room_height},
-                max_width: { $lte: req.body.room_size },
-                water: req.body.water,
-                light: req.body.light, 
-                $or:[ {kid_friendly: req.body.kid_friendly}, {pet_friendly: req.body.pet_friendly} ],
-                difficulty: req.body.difficulty
-                }).exec((error, plant) => {
-                    if (error){
-                      res.writeHead(404);	
-                      res.end("error");
+      Plant.find({ 
+            max_height: {$lt : req.body.room_height},
+            max_width: { $lte: roomSize},
+            water: req.body.water,
+            light: req.body.light, 
+            $or:[ {kid_friendly: req.body.kid_friendly}, {pet_friendly: req.body.pet_friendly} ],
+            difficulty: req.body.difficulty
+            }).exec((error, plants) => {
+                if (error){
+                  res.writeHead(404);	
+                  res.end("error");
+                } else {
+                  let newSpace = new Space()
+                    newSpace.name = req.body.name
+                    newSpace.room_size = req.body.room_size
+                    newSpace.room_height = req.body.room_height
+                    newSpace.water = req.body.water
+                    newSpace.light = req.body.light
+                    newSpace.kid_friendly = req.body.kid_friendly
+                    newSpace.pet_friendly = req.body.pet_friendly
+                    newSpace.plant_collection = []
+                    newSpace.recommended_plants = []
+                    newSpace.recommended_plants.push(plants)
+                    newSpace.save(function (err) {
+                    if (err) {
+                      res.send(err);
                     } else {
-                      return res.send(plant)
-                  }
-                })
-              }
-           })
-        })
+                      User.find({clientId: userId}).exec((err, user) => {
+                        if (err) {
+                          res.send(err)
+                        } else {
+                          user[0].spaces.push(space)
+                          user[0].save()
+                          res.send('success')
+                }     
+              }) 
+            }
+          })
+        }
+     })
+  })
+  
 
 app.get('/plantlibrary', (req, res) => {
     Plant.find({}).exec((err, plants) => {
@@ -107,45 +119,37 @@ app.get('/plantlibrary', (req, res) => {
 })
 
 
-app.post('/collection', (req, res) => {
-  const id = req.user
+app.post('/addtospacecollection', (req, res) => {
+
   const plantId = req.body.plant._id
+  const userId = req.body.userId
 
-  User.findById(id).exec((err, user) => {
-      if (err) {
-        res.send(err)
-      } else {
-        Plant.findById(plantId).exec((err, plant) => {
-          if (err) {
-            res.send(err)
-          } else {
-            user.plant_collection.push(plant)
-            user.save()
-            res.send({user})
-          }
-      })
-    }
-  })
-})
-
-app.post('/:userId/:plantId/addtocollection', (req, res) => {
-  let plantId = req.params.plantId
-  let userId = req.params.userId
-  
   Plant.findById(plantId).exec((err, plant) => {
     if (err) {
       res.send(err)
     } else {
-      User.findById(userId).exec((err, user) => {
+      User.find({clientId: userId}).exec((err, user) => {
         if (err) {
-        res.send(err)
+          res.send(err)
         } else {
-         user.plant_collection.push(plant)
-         user.save()
-         res.send('Plant has been saved to collection!')
-        }
-      })
+         user[0].spaces.push(plant)
+         user[0].save()
+         res.send('complete')
+       }
+     })
     }
+  })
+})
+
+app.get('/:userId/userspaces', (req, res) => {
+    const userId = req.params.userId
+
+    User.find({clientId: userId}).populate({path:'spaces'}).exec((err, user) => {
+      if (err) {
+        res.send(err)
+      } else {
+        res.send(user[0].spaces)
+      }
   })
 })
 
@@ -166,6 +170,7 @@ app.post('/adduser', (req, res) => {
   let newUser = new User()
 
     newUser.name = req.body.name
+    newUser.clientId = req.body.userId
     newUser.plant_collection = []
     newUser.wish_list = []
     newUser.spaces =[]

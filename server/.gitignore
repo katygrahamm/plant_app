@@ -1,2 +1,69 @@
 # dependencies
 /node_modules
+
+if (req.body.room_size === "Small"){
+          req.body.room_size = 2 
+        } else if (req.body.room_size === "Medium") {
+          req.body.room_size = 4
+        } else if (req.body.room_size === "Large") {
+          req.body.room_size = 12
+        }
+          Plant.find({ 
+                max_height: {$lt : req.body.room_height},
+                max_width: { $lte: req.body.room_size },
+                water: req.body.water,
+                light: req.body.light, 
+                $or:[ {kid_friendly: req.body.kid_friendly}, {pet_friendly: req.body.pet_friendly} ],
+                difficulty: req.body.difficulty
+                }).exec((error, plant) => {
+                    if (error){
+                      res.writeHead(404);	
+                      res.end("error");
+                    } else {
+                      return res.send(plant)
+                  }
+                })
+              }
+           })
+        })
+
+
+renderPlants() {
+    console.log(this.props.recommendations)
+    console.log(this.props.user._id)
+    if (this.props.recommendations == []) {
+      return (
+        <div>Loading ... </div>
+      )
+    } else {
+      return(
+          <div className="plant-recommendations">
+            <Grid item xs
+              spacing={3}
+              justify="center"
+            >
+              <div>
+              <h2 className="title-plant-recomm">Plant Recommendations</h2>
+              <h2 className="title-plant-recomm">{this.state.name}</h2>
+              <hr />
+              {
+              this.props.recommendations.map(plant => (
+              <div>
+              <h3 className="common-name-recomm">{plant.common_name}</h3>
+              <h5 className="botanical-name-recomm">{plant.botanical_name}</h5>
+              <br></br>
+              <img className="plant-img-recomm" height="150px" width="auto" alt="plant-image" src={plant.image_url}></img>
+              <Button className="button-add-to-collection" variant="outline-secondary" onClick={event => {this.handleAdd(plant)} }>+ Add to {this.state.name}</Button>
+              <hr />
+              </div>
+
+              ))
+              
+              }
+            
+            </div>
+          </Grid>
+        </div>
+      )
+    }
+  }
